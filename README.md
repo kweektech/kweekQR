@@ -165,3 +165,4 @@ Pour toute question ou problème, veuillez contacter le développeur.
 ---
 
 **KweekQR** - Créez des codes QR magnifiques et fonctionnels! 🎉
+# kweekQR
