@@ -3,7 +3,8 @@ import QRCodeStyling from 'qr-code-styling';
 import { jsPDF } from 'jspdf';
 import {
   Globe, FileText, File, Image, User, Video, Download, Copy, RotateCcw, Share2, Printer,
-  Wifi, Mail, Smartphone, Briefcase, UtensilsCrossed, Tag, Package, Music, LinkIcon, Heart, Zap
+  Wifi, Mail, Smartphone, Briefcase, UtensilsCrossed, Tag, Package, Music, LinkIcon, Heart, Zap,
+  Calendar
 } from 'lucide-react';
 
 type ContentType = 'website' | 'text' | 'pdf' | 'images' | 'vcard' | 'video' | 'wifi' | 'email' 
@@ -38,12 +39,27 @@ const QR_TYPES = [
   { id: 'pdf', name: 'PDF', icon: File, color: '#F59E0B' },
   { id: 'images', name: 'Images', icon: Image, color: '#EC4899' },
   { id: 'vcard', name: 'vCard', icon: User, color: '#10B981' },
+  { id: 'video', name: 'Video', icon: Video, color: '#EF4444' },
+  { id: 'wifi', name: 'Wi-Fi', icon: Wifi, color: '#06B6D4' },
+  { id: 'email', name: 'Email', icon: Mail, color: '#F97316' },
+  { id: 'whatsapp', name: 'WhatsApp', icon: Smartphone, color: '#25D366' },
+  { id: 'sms', name: 'SMS', icon: Smartphone, color: '#3B82F6' },
+  { id: 'business', name: 'Business', icon: Briefcase, color: '#6366F1' },
+  { id: 'menu', name: 'Menu', icon: UtensilsCrossed, color: '#F59E0B' },
+  { id: 'coupon', name: 'Coupon', icon: Tag, color: '#EC4899' },
+  { id: 'product', name: 'Product', icon: Package, color: '#14B8A6' },
+  { id: 'app', name: 'App', icon: Download, color: '#8B5CF6' },
+  { id: 'mp3', name: 'MP3', icon: Music, color: '#F43F5E' },
+  { id: 'landing', name: 'Landing', icon: Zap, color: '#FBBF24' },
+  { id: 'event', name: 'Event', icon: Calendar, color: '#06B6D4' },
+  { id: 'feedback', name: 'Feedback', icon: Heart, color: '#EF4444' },
+  { id: 'playlist', name: 'Playlist', icon: Music, color: '#8B5CF6' },
+  { id: 'link-list', name: 'Links', icon: LinkIcon, color: '#3B82F6' },
+  { id: 'vcard-plus', name: 'vCard+', icon: User, color: '#10B981' },
+  { id: 'social', name: 'Social', icon: Share2, color: '#06B6D4' },
 ];
 
-import { Calendar } from 'lucide-react';
-
 const SHAPE_STYLES = ['square', 'rounded1', 'rounded2', 'rounded3', 'rounded4', 'dots'];
-const DOWNLOAD_FORMATS = ['png', 'pdf', 'svg'];
 
 export function QRGenerator() {
   // Content states
@@ -69,15 +85,8 @@ export function QRGenerator() {
   const [menuDesc, setMenuDesc] = useState('Cafe Menu');
   const [couponCode, setCouponCode] = useState('DISCOUNT2024');
   const [couponDiscount, setCouponDiscount] = useState('20%');
-  const [productName, setProductName] = useState('Product Name');
-  const [productUrl, setProductUrl] = useState('https://www.amazon.com');
   const [eventTitle, setEventTitle] = useState('Conférence Tech 2026');
   const [eventDesc, setEventDesc] = useState('Rejoignez-nous pour une conférence exclusive');
-  const [feedbackUrl, setFeedbackUrl] = useState('https://forms.google.com');
-  const [playlistUrl, setPlaylistUrl] = useState('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
-  const [appUrl, setAppUrl] = useState('https://www.google.com/play');
-  const [mp3Url, setMp3Url] = useState('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
-  const [landingUrl, setLandingUrl] = useState('https://www.google.com');
   const [linkItems, setLinkItems] = useState<LinkItem[]>([
     { title: 'Website', url: 'https://www.google.com' },
     { title: 'Twitter', url: 'https://twitter.com' },
@@ -89,8 +98,6 @@ export function QRGenerator() {
   const [qrColor, setQrColor] = useState('#000000');
   const [bgColor, setBgColor] = useState('#ffffff');
   const [shapeStyle, setShapeStyle] = useState('square');
-  const [borderStyle, setBorderStyle] = useState('square');
-  const [centerStyle, setCenterStyle] = useState('square');
   const [errorLevel, setErrorLevel] = useState('M');
   const [hasLogo, setHasLogo] = useState(false);
   const [logoFile, setLogoFile] = useState<string | null>(null);
@@ -226,11 +233,10 @@ export function QRGenerator() {
     qrContainerRef.current.innerHTML = '';
     qrCode.append(qrContainerRef.current);
     qrCodeInstance.current = qrCode; // Store instance for downloads
-  }, [url, text, qrColor, bgColor, shapeStyle, errorLevel, contentType, vcard, wifi, emailTo, 
+    }, [url, text, qrColor, bgColor, shapeStyle, errorLevel, contentType, vcard, wifi, emailTo, 
       emailSubject, emailBody, whatsappNumber, whatsappMessage, smsNumber, smsMessage, 
       businessName, businessDesc, menuTitle, menuDesc, couponCode, couponDiscount, 
-      productName, productUrl, eventTitle, eventDesc, feedbackUrl, playlistUrl, 
-      appUrl, mp3Url, landingUrl, linkItems, socialUrls, hasTransparentBg, hasLogo, logoFile, logoSize, logoMargin, isGradient, gradientColor, frameStyle]);
+      eventTitle, eventDesc, linkItems, socialUrls, hasTransparentBg, hasLogo, logoFile, logoSize, logoMargin, isGradient, gradientColor, frameStyle]);
 
   // Download QR
   const downloadQR = async () => {
@@ -317,8 +323,6 @@ export function QRGenerator() {
     setQrColor('#000000');
     setBgColor('#ffffff');
     setShapeStyle('square');
-    setBorderStyle('square');
-    setCenterStyle('square');
     setErrorLevel('M');
     setHasTransparentBg(false);
     setHasLogo(false);
@@ -332,8 +336,8 @@ export function QRGenerator() {
     setCopyStatus(false);
   };
 
-  // Share QR
-  const shareQR = () => {
+  // Share QR - Download the QR code
+  const shareQR = async () => {
     try {
       const canvas = qrContainerRef.current?.querySelector('canvas') as HTMLCanvasElement;
       if (!canvas) {
@@ -341,25 +345,25 @@ export function QRGenerator() {
         return;
       }
 
-      const dataUrl = canvas.toDataURL('image/png');
-      if (navigator.share) {
-        navigator
-          .share({
-            title: 'QR Code',
-            text: 'Check out my QR code!',
-            url: dataUrl,
-          })
-          .catch((err) => console.log('Share cancelled:', err));
-      } else {
-        const w = window.open('', '_blank');
-        if (w) {
-          w.document.write(`<img src="${dataUrl}" style="width:400px;height:400px;"/>`);
-        } else {
-          alert('Share not supported on this browser');
+      // Convert canvas to blob and download
+      canvas.toBlob((blob) => {
+        if (!blob) {
+          alert('Failed to generate QR code image');
+          return;
         }
-      }
+
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `qr-code-${Date.now()}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }, 'image/png');
     } catch (error) {
       console.error('Share error:', error);
+      alert('Failed to download QR code');
     }
   };
 
@@ -372,12 +376,11 @@ export function QRGenerator() {
           url, text, vcard, wifi, emailTo, emailSubject, emailBody,
           whatsappNumber, whatsappMessage, smsNumber, smsMessage,
           businessName, businessDesc, menuTitle, menuDesc,
-          couponCode, couponDiscount, productName, productUrl,
-          eventTitle, eventDesc, feedbackUrl, playlistUrl, appUrl, mp3Url, landingUrl,
+          couponCode, couponDiscount, eventTitle, eventDesc,
           linkItems, socialUrls
         },
         design: {
-          qrColor, bgColor, shapeStyle, borderStyle, centerStyle,
+          qrColor, bgColor, shapeStyle,
           errorLevel, hasLogo, logoSize, hasTransparentBg, isGradient, gradientColor,
           frameStyle, frameText, downloadFormat
         }
@@ -738,7 +741,27 @@ export function QRGenerator() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Top Header with Logo */}
-      
+      <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 text-white py-4 shadow-lg">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <img src="/logo.svg" alt="KweekQR Logo" className="w-10 h-10" />
+              <div>
+                <h1 className="text-2xl font-bold tracking-tight">
+                  <span className="text-white">Kweek</span>
+                  <span className="text-orange-300">QR</span>
+                </h1>
+                <p className="text-xs text-blue-100">Générateur de QR Code Professionnel</p>
+              </div>
+            </div>
+            <div className="hidden md:flex items-center gap-4 text-sm">
+              <span className="bg-white/20 px-3 py-1 rounded-full">✨ Gratuit</span>
+              <span className="bg-white/20 px-3 py-1 rounded-full">🚀 Illimité</span>
+              <span className="bg-white/20 px-3 py-1 rounded-full">🔒 Sans inscription</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* QR Types Header */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-40">
@@ -777,6 +800,13 @@ export function QRGenerator() {
               </div>
               {renderContentForm()}
               
+              {/* QR Code Preview - shows what will be encoded */}
+              <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-xs font-semibold text-blue-800 mb-1">📱 Contenu encodé dans le QR:</p>
+                <p className="text-xs text-blue-700 break-all font-mono bg-white p-2 rounded border">
+                  {getQRValue()}
+                </p>
+              </div>
             </div>
           </div>
 

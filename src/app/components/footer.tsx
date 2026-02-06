@@ -70,7 +70,7 @@ export default function Footer() {
           <div className="border-t border-gray-800/60 mt-8 pt-8">
             <div className="text-sm text-black flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
               <p>© 2026 KweekQR - Powered by KweekTech. Tous droits réservés.</p>
-              <p>Made with ❤️ en Tunisie</p>
+              <p>Made with ❤️ in Tunisia</p>
             </div>
           </div>
         </div>

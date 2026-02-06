@@ -36,7 +36,7 @@ export default function App() {
             </div>
           </div>
           <div className="absolute bottom-8 text-white text-sm font-medium">
-            Made with ❤️ en Tunisie
+            Made with ❤️ in Tunisia
           </div>
         </div>
       )}
